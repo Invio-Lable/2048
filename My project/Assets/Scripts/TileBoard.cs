@@ -5,19 +5,14 @@ using UnityEngine;
 public class TileBoard : MonoBehaviour
 {
     public GameManager gameManager;
-
     public Tile tilePrefab;
-
     public TileState[] tileStates;
-
     private TileGrid grid;
-
     private List<Tile> tiles;
-
     private bool waiting;
-
     private Vector2 touchStart;
     private Vector2 touchEnd;
+    private bool animalMode = false; // Новий стан для режиму тварин
 
     private void Awake() 
     {
@@ -44,8 +39,19 @@ public class TileBoard : MonoBehaviour
     {
         Tile tile = Instantiate(tilePrefab, grid.transform);
         tile.SetState(tileStates[0], 2); 
+        tile.SetAnimalMode(animalMode); // Встановлюємо режим для нової плитки
         tile.Spawn(grid.GetRandomEmptyCell());
         tiles.Add(tile);
+    }
+
+    // Новий метод для перемикання режиму
+    public void ToggleAnimalMode()
+    {
+        animalMode = !animalMode; // Перемикаємо режим
+        foreach (var tile in tiles)
+        {
+            tile.SetAnimalMode(animalMode); // Оновлюємо всі плитки
+        }
     }
 
     private void Update()
@@ -99,7 +105,6 @@ public class TileBoard : MonoBehaviour
 
     private void MoveTiles(Vector2Int direction, int startX, int incrementX, int startY, int incrementY) 
     {
-
         bool changed = false;
 
         for (int x = startX; x >= 0 && x < grid.width; x += incrementX)
@@ -119,7 +124,6 @@ public class TileBoard : MonoBehaviour
         {
             StartCoroutine(WaitForChanges());
         }
-
     }
 
     private bool MoveTile(Tile tile, Vector2Int direction) 
@@ -142,7 +146,6 @@ public class TileBoard : MonoBehaviour
 
             newCell = adjacent;
             adjacent = grid.GetAdjacentCell(adjacent, direction);
-
         }
 
         if (newCell != null) 
@@ -168,6 +171,7 @@ public class TileBoard : MonoBehaviour
         int number = b.number * 2;
 
         b.SetState(tileStates[index], number);
+        b.SetAnimalMode(animalMode); // Оновлюємо режим для об'єднаної плитки
     }
 
     private int IndexOf(TileState state)
@@ -202,7 +206,6 @@ public class TileBoard : MonoBehaviour
         if (CheckForGameOver()) {
             gameManager.GameOver();
         }
-
     }
 
     private bool CheckForGameOver()
@@ -235,5 +238,4 @@ public class TileBoard : MonoBehaviour
 
         return true;
     }
-
 }

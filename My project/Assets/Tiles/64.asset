@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   backgroundColor: {r: 0.96862745, g: 0.37254903, b: 0.23137255, a: 1}
   textColor: {r: 0.9764706, g: 0.9647059, b: 0.9490196, a: 1}
+  animalSprite: {fileID: 21300000, guid: 8526032b1c084ca428cf2b0e89719df1, type: 3}
